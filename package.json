@@ -1,0 +1,18 @@
+{
+  "name": "adventofcode2018",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichalKarbownik/AdventOfCode2018.git"
+  },
+  "author": "Michal Karbownik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MichalKarbownik/AdventOfCode2018/issues"
+  },
+  "homepage": "https://github.com/MichalKarbownik/AdventOfCode2018#readme"
+}
