@@ -4,12 +4,10 @@ function parseData(inputData) {
 }
 
 function mapCharactersOccurrences(stringToMap) {
-    let currentCharacter;
     let letterOccurrenceMap = new Map();
 
     //for all characters in the string
-    for (let characterCounter = 0; characterCounter < stringToMap.length; characterCounter++) {
-        currentCharacter = stringToMap.charAt(characterCounter);
+    Array.from(stringToMap).forEach((currentCharacter) => {
         let currentNumberOfOccurrences;
 
         //if there is a record with the current character as a key, increment its value, else add it to the mao with a value of 1
@@ -19,7 +17,7 @@ function mapCharactersOccurrences(stringToMap) {
         else {
             letterOccurrenceMap.set(currentCharacter, 1);
         }
-    }
+    });
 
     return letterOccurrenceMap;
 }
@@ -28,8 +26,7 @@ function getOccurrences(idsArray) {
     let hadTwoOccurrences = 0, hadThreeOccurrences = 0;
 
     //for all IDs in the array
-    for(let counter = 0; counter < idsArray.length; counter++) {
-        let currentID = idsArray[counter];
+    idsArray.forEach((currentID) => {
         let letterOccurrenceMap = mapCharactersOccurrences(currentID);
 
         //convert the map to array
@@ -44,7 +41,7 @@ function getOccurrences(idsArray) {
         if (letterOccurrenceArray.includes(3)) {
             hadThreeOccurrences++;
         }
-    }
+    });
 
     return {
         hadTwoOccurrences: hadTwoOccurrences,
