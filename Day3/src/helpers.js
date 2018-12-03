@@ -53,3 +53,40 @@ export function getNumberOfInchesOverlapped(inputData) {
 
     return inchesOverlapped;
 }
+
+export function getNonOverlappingClaimID(inputData) {
+    let materialField = fillMaterialField(parseData(inputData));
+    let inputDataArray = parseData(inputData);
+    let nonOverlappingClaimID = "";
+
+    //for each material claim
+    inputDataArray.forEach((claim) => {
+        let startingXIndex = parseInt(claim[1]);
+        let startingYIndex = parseInt(claim[2]);
+        let finishingXIndex = startingXIndex + parseInt(claim[3]);
+        let finishingYIndex = startingYIndex + parseInt(claim[4]);
+        let isOverlapping = false;
+
+        //on each square inch from starting indexes to finishing indexes in both X and Y axis
+        for(let xCounter = startingXIndex; xCounter < finishingXIndex; xCounter++) {
+            for(let yCounter = startingYIndex; yCounter < finishingYIndex; yCounter++) {
+                //if is overlapping change the flag and break out of both for loops
+                if(materialField[xCounter][yCounter] > 1) {
+                    isOverlapping = true;
+                    break;
+                }
+            }
+            if(isOverlapping) {
+                break;
+            }
+        }
+
+        //if is not overlapping - save the id and break out of the forEach loop
+        if(!isOverlapping) {
+            nonOverlappingClaimID = claim[0];
+            return true;
+        }
+    });
+
+    return nonOverlappingClaimID;
+}
