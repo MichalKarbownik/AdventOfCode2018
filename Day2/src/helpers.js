@@ -3,28 +3,34 @@ function parseData(inputData) {
     return inputData;
 }
 
+function mapCharactersOccurrences(stringToMap) {
+    let currentCharacter;
+    let letterOccurrenceMap = new Map();
+
+    //for all characters in the string
+    for (let characterCounter = 0; characterCounter < stringToMap.length; characterCounter++) {
+        currentCharacter = stringToMap.charAt(characterCounter);
+        let currentNumberOfOccurrences;
+
+        //if there is a record with the current character as a key, increment its value, else add it to the mao with a value of 1
+        if((currentNumberOfOccurrences = letterOccurrenceMap.get(currentCharacter)) !== undefined) {
+            letterOccurrenceMap.set(currentCharacter, ++currentNumberOfOccurrences);
+        }
+        else {
+            letterOccurrenceMap.set(currentCharacter, 1);
+        }
+    }
+
+    return letterOccurrenceMap;
+}
+
 function getOccurrences(idsArray) {
     let hadTwoOccurrences = 0, hadThreeOccurrences = 0;
 
     //for all IDs in the array
     for(let counter = 0; counter < idsArray.length; counter++) {
         let currentID = idsArray[counter];
-        let letterOccurrenceMap = new Map();
-        let currentCharacter;
-
-        //for all characters in the ID
-        for (let characterCounter = 0; characterCounter < currentID.length; characterCounter++) {
-            currentCharacter = currentID.charAt(characterCounter);
-            let currentNumberOfOccurrences;
-
-            //if there is a record with the current character as a key, increment its value, else add it to the mao with a value of 1
-            if((currentNumberOfOccurrences = letterOccurrenceMap.get(currentCharacter)) !== undefined) {
-                letterOccurrenceMap.set(currentCharacter, ++currentNumberOfOccurrences);
-            }
-            else {
-                letterOccurrenceMap.set(currentCharacter, 1);
-            }
-        }
+        let letterOccurrenceMap = mapCharactersOccurrences(currentID);
 
         //convert the map to array
         let letterOccurrenceArray = Array.from(letterOccurrenceMap.values());
