@@ -55,3 +55,47 @@ export function checksum(inputData) {
 
     return occurrences.hadTwoOccurrences * occurrences.hadThreeOccurrences;
 }
+
+export function getDifferedByMaxOneCharacter(idsArray) {
+    idsArray = parseData(idsArray);
+
+    let characterDifferedIndex = 0;
+    let correctID = "";
+
+    //for every id in the array
+    idsArray.forEach((currentID, currentIDIndex) => {
+        let differedByMaxOneCharacter = false;
+
+        //for every remaining id
+        for(let secondIDCounter = currentIDIndex + 1; secondIDCounter < idsArray.length; secondIDCounter++) {
+            let currentSecondID = idsArray[secondIDCounter];
+            let numberOfDifferedCharacters = 0;
+
+            //for all characters of the shorter string
+            for(let characterCounter = 0; characterCounter  < currentID.length && currentSecondID.length; characterCounter++) {
+                //if the corresponding characters are different, save the their index and increment the counter
+                if(currentID[characterCounter] !== currentSecondID[characterCounter]) {
+                    characterDifferedIndex = characterCounter;
+                    numberOfDifferedCharacters++;
+                }
+            }
+
+            //if number of different characters was equal or smaller than 1, set a flag to true and save the ID
+            if(numberOfDifferedCharacters <= 1) {
+                differedByMaxOneCharacter = true;
+                correctID = currentID;
+            }
+        }
+
+        //if a condition of the task is met, break out of forEach loop
+        if(differedByMaxOneCharacter) {
+            return true;
+        }
+    });
+
+    //retrieve the string without differing character
+    correctID = correctID.slice(0, characterDifferedIndex-1) + correctID.slice(characterDifferedIndex);
+
+    return correctID;
+}
+
