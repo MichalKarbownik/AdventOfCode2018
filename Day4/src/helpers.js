@@ -86,16 +86,17 @@ function mapGuardSleepingTime(parsedSortedData) {
     return guardSleepingTimeMap;
 }
 
-function getSleepingMinutesChart(parsedData, guardID) {
-    let startedSleepingMinutes;
+function getSleepingMinutesChart(parsedData) {
+    let startedSleepingMinutes, currentGuardId;
     //create a new array and fill it with '0'
-    let guardSleepingChart = new Array(60).fill(0);
+    let guardEmptyArray = new Array(60).fill(0);
+    let guardSleepingChartMap = new Map();
 
     //for each record
     parsedData.forEach((currentRecord) => {
-        if(currentRecord.guardID === guardID) {
             switch (currentRecord.guardState) {
                 case GUARD_STATE_BEGINS:
+                    currentGuardId = currentRecord.guardID;
                     break;
                 case GUARD_STATE_FALLS:
                     startedSleepingMinutes = currentRecord.parsedDate.getMinutes();
@@ -103,16 +104,25 @@ function getSleepingMinutesChart(parsedData, guardID) {
                 case GUARD_STATE_WAKES:
                     let finishedSleepingMinutes = currentRecord.parsedDate.getMinutes();
 
-                    //for each slept minute, increment its value
-                    for(let minutesCounter = startedSleepingMinutes; minutesCounter < finishedSleepingMinutes; minutesCounter++) {
-                        guardSleepingChart[minutesCounter]++;
+                    if((guardSleepingChartMap.get(currentGuardId)) !== undefined) {
+                        //for each slept minute, increment its value
+                        for (let minutesCounter = startedSleepingMinutes; minutesCounter < finishedSleepingMinutes; minutesCounter++) {
+                            guardSleepingChartMap.get(currentGuardId)[minutesCounter]++;
+                        }
+                    }
+                    else {
+                        guardSleepingChartMap.set(currentGuardId, guardEmptyArray);
+
+                        for (let minutesCounter = startedSleepingMinutes; minutesCounter < finishedSleepingMinutes; minutesCounter++) {
+                            guardSleepingChartMap.get(currentGuardId)[minutesCounter]++;
+                        }
                     }
             }
-        }
     });
 
-    return guardSleepingChart;
+    return guardSleepingChartMap;
 }
+
 
 export function getLongestSleepingGuardChecksum(inputData) {
     let parsedData = parseData(inputData);
@@ -133,7 +143,7 @@ export function getLongestSleepingGuardChecksum(inputData) {
     let longestSleepingGuardID = maxGuardSleepingTimeArray[0];
 
     //get a chart that visualises how many times the guard slept throughout particular minutes
-    let guardSleepingChart = getSleepingMinutesChart(parsedData, longestSleepingGuardID);
+    let guardSleepingChart = getSleepingMinutesChart(parsedData).get(longestSleepingGuardID);
 
     //iterate to choose the minute that was slept throughout the most frequently
     let mostFrequentSleepingMinute = guardSleepingChart.reduce((previousIndex, currentElement, currentIndex, array) => {
