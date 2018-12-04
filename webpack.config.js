@@ -2,11 +2,11 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        'main': './Day1/src/main.js',
+        'main': './Day4/src/main.js',
     },
     output: {
         filename: '[name].js',
-        path: path.resolve(__dirname, 'Day1/build/')
+        path: path.resolve(__dirname, 'Day4/build/')
     },
     module: {
         rules: [
