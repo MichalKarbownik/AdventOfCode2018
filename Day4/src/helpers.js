@@ -159,3 +159,31 @@ export function getLongestSleepingGuardChecksum(inputData) {
     //return a checksum
     return longestSleepingGuardID * mostFrequentSleepingMinute;
 }
+
+export function getLongestSleepingOnParticularMinuteGuardChecksum(inputData) {
+    let parsedData = parseData(inputData);
+
+    //sort by the dates increasingly
+    parsedData.sort((first, second) => {
+        return first.parsedDate - second.parsedDate;
+    });
+
+    let sleepingChart = getSleepingMinutesChart(parsedData);
+
+    let maximumFrequency = 0, mostFrequentMinute = 0, mostFrequentGuardID = 0;
+
+    //for each guard in the sleeping chart
+    sleepingChart.forEach((guardSleepingChart, guardID) => {
+        //for each minute
+        guardSleepingChart.forEach((frequency, minute) => {
+            //if frequency is bigger than maximum, assign current guard ID, current minute and current frequency
+            if(frequency > maximumFrequency) {
+                mostFrequentGuardID = guardID;
+                mostFrequentMinute = minute;
+                maximumFrequency = frequency;
+            }
+        });
+    });
+
+    return mostFrequentGuardID * mostFrequentMinute;
+}
