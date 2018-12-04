@@ -130,6 +130,7 @@ function getSleepingMinutesChart(parsedData) {
     return guardSleepingChartMap;
 }
 
+
 export function getLongestSleepingGuardChecksum(inputData) {
     let parsedData = parseData(inputData);
 
